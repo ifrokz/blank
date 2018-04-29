@@ -20,7 +20,7 @@ describe('Server.js /users/** routes ',() => {
             request(app)
                 .post('/users/register')
                 .send(tempUser)
-                .expect(200)
+                .expect(201)
                 .expect((res)=>{
                     expect(res.body._id).toBeTruthy();
                     expect(res.body.email).toEqual(tempUser.email);
@@ -62,13 +62,13 @@ describe('Server.js /users/** routes ',() => {
             request(app)
                 .post('/users/register')
                 .send(tempUser)
-                .expect(400)
+                .expect(409)
                 .end(done);
         });
     });
     
     describe('POST /users/login', () => {
-        it('shuld login user and return auth token', (done)=> {
+        it('should login user and return auth token', (done)=> {
             
             request(app)
                 .post('/users/login')
@@ -104,7 +104,7 @@ describe('Server.js /users/** routes ',() => {
                     email: 'inexistentEmail@gmail.com',
                     password: 'password'
                 })
-                .expect(400)    
+                .expect(404)    
                 .end(done);
         });
     
