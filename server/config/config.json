@@ -1,0 +1,12 @@
+{
+    "test": {
+        "port": 3000,
+        "MONGODB_URI": "mongodb://localhost:27017/BLANKTest",
+        "JWT_SECRET": "saltJWT"
+    },
+    "development": {
+        "port": 3000,
+        "MONGODB_URI": "mongodb://localhost:27017/BLANK",
+        "JWT_SECRET": "saltJWT"
+    }
+}
