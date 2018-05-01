@@ -9,7 +9,9 @@ const app = require('express')();
 
 app.use(bodyParser.json());
 app.use(require('./routes/user'));
+app.use(require('./routes/personal'));
 
+console.log('Validator:', require('validator').isMobilePhone('+33605842890', 'es-ES', {strictMode: true}) );
 
 app.listen(process.env.PORT, () => {
     console.log(`Started on port ${process.env.PORT}`);

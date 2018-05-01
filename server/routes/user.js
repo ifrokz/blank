@@ -7,7 +7,7 @@ const {User} = require('./../db/models/user');
 const {authenticate} = require('./../middleware/authenticate');
 
 router.post('/users/register', async (req, res) => { 
-    try{
+    try {
         const user  = await new User(req.body).save();
         const token = await user.generateAuthToken();
         res.status(201).header('x-auth', token).send(user);
@@ -50,8 +50,6 @@ router.delete('/users/me/token', authenticate, async (req, res)=>{
         res.status(400).send();
     };
 });
-
-router.up
 
 
 module.exports = router;

@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
         unique: true,
         validate: {
             isAsync: true,
-            validator: validator.isEmail,
+            validator: (email)=> validator.isEmail(email),
             message: '{VALUE} is not a valid email.'
         }
     },
@@ -104,11 +104,15 @@ UserSchema.statics.findByCredentials = async function (email, password) {
     });
 };
 
+UserSchema.statics.updatePersonalInfo = async function (info) {
+    const {name, lastName, phones} = {...info};
+}
+
 UserSchema.pre('save', function(next){
     const user = this;
-    const saltTimes = process.env.NODE_ENV === 'test' ? 1 : 10;
+    const saltRounds = process.env.NODE_ENV === 'test' ? 1 : 10;
     if(user.isModified('password')){
-        bcrypt.genSalt(saltTimes, (err, salt) => {
+        bcrypt.genSalt(saltRounds, (err, salt) => {
             bcrypt.hash(user.password, salt, (err, hashedPassword) => {
                 bcrypt.compare(user.password, hashedPassword, (err, res) => {
                     user.password = hashedPassword;

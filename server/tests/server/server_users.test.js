@@ -6,7 +6,7 @@ const {ObjectID} = require('mongodb');
 
 const {User} = require('./../../db/models/user.js');
 const {app} = require('./../../server.js');
-const {populateUsers, users} = require('./seed/server_user_seed.js');
+const {populateUsers, users} = require('./seed/user_seed.js');
 
 beforeEach(populateUsers);
 describe('Server.js /users/** routes ',() => {
