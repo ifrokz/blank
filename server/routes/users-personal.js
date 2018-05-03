@@ -3,8 +3,8 @@
 const router = require('express').Router();
 const _ = require('lodash');
 
-const {Personal} = require('./../db/models/personal');
 const {authenticate} = require('./../middleware/authenticate');
+const {User} = require('../db/models/user');
 
 router.post('/users/personal/update', authenticate, async (req, res) => {
 
@@ -20,15 +20,18 @@ router.post('/users/personal/update', authenticate, async (req, res) => {
 
 router.post('/users/personal/create', authenticate, async (req, res) => {
   try {  
-    let data = _.pick(req.body, ['name','address']);
+    let data = _.pick(req.body, ['name','secondName','addresses']);
     data.userId = req.user._id;
     data.phones = [];
     req.body.phones.forEach(phone => {
       data.phones.push(phone);
     });
-    console.log(data)
-    const personal = await new Personal({...data}).save();
-    res.send(personal);
+    
+    let user = await User.findById(req.user._id);
+    user.personal = data;
+    await user.save();
+
+    res.send(user);
   }catch (e){
     res.status(400).send(e);
   };

@@ -8,6 +8,8 @@ const bcrypt = require('bcrypt');
 
 const {genPayload} = require('./utils/user_utils');
 
+const {PersonalSchema, personalObject} = require('./personal');
+
 const UserSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -35,7 +37,8 @@ const UserSchema = new mongoose.Schema({
             type: String,
             required: true
         }
-    }]
+    }],
+    personal: {...personalObject}
 });
 
 UserSchema.methods.toJSON = function () {

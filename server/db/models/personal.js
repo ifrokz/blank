@@ -1,17 +1,8 @@
 "use strict";
 
-const mongoose = require('mongoose');
 const validator = require('validator');
-const _ = require('lodash');
 
-const {User} = require("./user");
-
-const PersonalSchema = new mongoose.Schema({
-    userId: {
-        type: String,
-        unique: true,
-        index: true
-        },
+module.exports.personalObject = {
     name:{
         type: String,
         minlength: 2
@@ -25,21 +16,21 @@ const PersonalSchema = new mongoose.Schema({
         },
         code:  {
             type: String,
-            required: true,
+            required: false,
             trim: true
         },
         number: {
             type: String,
-            required: true,
+            required: false,
             trim: true,
             validate: {
                 isAsync: true,
-                validator: (phone)=> validator.isMobilePhone(phone, 'any', {strictMode: true}),
+                validator: (phone)=> validator.isMobilePhone(phone, 'any', {strictMode: false}),
                 message: '{VALUE} is not a valid phone number or has a wrong region code.'
             }
         }
     }],
-    address: [{
+    addresses: [{
         main_address: {
             default: false,
             type: Boolean,
@@ -47,25 +38,27 @@ const PersonalSchema = new mongoose.Schema({
         },
         country: {
             type: String,
-            required: true
+            required: false
         },
         state: {
-            required: true,
+            required: false,
             type: String
         },
         postCode: {
             type: String,
-            required: true,
-            // validator: {
-            //     validate: validator.postCode
-            // }
+            required: false,
+            validator: {
+                isAsync: true,
+                validate: (code) => validator.postCode(code, 'any'),
+                message: '{VALUE} is not a valid post code'
+            }
         },
         city: {
             type: String,
-            required: true
+            required: false
         },
         street: {
-            required: true,
+            required: false,
             type: String
         },
         floor: {
@@ -74,44 +67,8 @@ const PersonalSchema = new mongoose.Schema({
         },
         door: {
             type: String,
-            required: true
+            required: false
         }
     }],
-});
-
-// phone:[{
-//     code:  {
-//         type: String,
-//         required: true,
-//         trim: true
-//     },
-//     number: {
-//         type: String,
-//         required: true,
-//         trim: true,
-//         validate: {
-//             isAsync: true,
-//             validator: (phone) => {
-//                 validator.isMobilePhone(phone, 'any', {strictMode: true})
-//             },
-//             message: '{VALUE} is not a valid phone number'
-//         }
-//     }
-// }],
-
-PersonalSchema.statics.findByCreatedByUserId = async function(id) {
-  const personal = this;
-  let user, info;
-
-  try {
-    user = await User.findById(id);
-  } catch (e) {
-    return Promise.reject();
-  };
-
-  return user;
 };
 
-const Personal = mongoose.model('Personal' , PersonalSchema);
-
-module.exports = {Personal}
