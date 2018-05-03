@@ -18,7 +18,7 @@ router.post('/users/personal/update', authenticate, async (req, res) => {
 
 });
 
-router.post('/users/personal/create', authenticate, async (req, res) => {
+router.post('/users/personal/set', authenticate, async (req, res) => {
   try {  
     let data = _.pick(req.body, ['name','secondName','address','phone']);
 
@@ -27,9 +27,13 @@ router.post('/users/personal/create', authenticate, async (req, res) => {
     }
 
     let user = await User.findById(req.user._id);
-    user.personal = data;
-    await user.save();
+    
+    user.personal.name = data.name;
+    user.personal.secondName = data.secondName;
+    user.personal.phone = {...user.personal.phone, ...data.phone};
+    user.personal.address = {...user.personal.address, ...data.address};
 
+    await user.save();
     res.send(user);
   }catch (e){
     res.status(400).send(e);

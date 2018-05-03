@@ -175,13 +175,10 @@ describe('Server.js /users/** routes ',() => {
         });
     });
 
-    describe('POST /users/personal/create',()=>{
+    describe('POST /users/personal/set',()=>{
         it('should populate personal data from a created user', (done) => {
-
-            // console.log({...personalData[0]})
-            
             request(app)
-                .post('/users/personal/create')
+                .post('/users/personal/set')
                 .set('x-auth', users[2].tokens[0].token)
                 .send({...personalData[0]})
                 .expect(200)
@@ -205,9 +202,9 @@ describe('Server.js /users/** routes ',() => {
 
         it('should populate only name and secondname from a created user', (done) => {
             let tempData = _.pick(personalData[0], ['name', 'secondName']);
-            // console.log({...tempData})
+            
             request(app)
-            .post('/users/personal/create')
+            .post('/users/personal/set')
             .set('x-auth', users[2].tokens[0].token)
             .send({...tempData})
             .expect(200)
@@ -234,7 +231,7 @@ describe('Server.js /users/** routes ',() => {
 
             let tempData = _.pick(personalData[0], ['address']);
             request(app)
-                .post('/users/personal/create')
+                .post('/users/personal/set')
                 .set('x-auth', users[2].tokens[0].token)
                 .send({...personalData[0]})
                 .expect(200)
@@ -259,9 +256,45 @@ describe('Server.js /users/** routes ',() => {
                 });
         });
 
+        it('should update if data exists', (done) => {
+            let tempUser = {
+                name: 'Random',
+                phone:{code: 'en-US'},
+                address:{country: "USA"}
+            };
+            request(app)
+                .post('/users/personal/set')
+                .set('x-auth', users[0].tokens[0].token)
+                .send({
+                    name: tempUser.name,
+                    phone: {
+                        code: tempUser.phone.code
+                    },
+                    address: {
+                        country: tempUser.address.country
+                    }
+                })
+                .expect(200)
+                .expect(res=>{
+                    expect(res.body._id).toBe(users[0]._id.toHexString());
+                })
+                .end(async(err, res)=>{
+                    if(err){
+                        return done(err);
+                    }
+                    try{
+                        const user = await User.findById(res.body._id);
+                        expect(user.personal).toMatchObject(tempUser);
+                        done();
+                    } catch(e){
+                        done(e);
+                    }
+                })
+        });
+
         it('should return 401 if unauthorized' ,(done) => {
             request(app)
-                .post('/users/personal/create')
+                .post('/users/personal/set')
                 .set('x-auth', users[0].tokens[0].token + 'salt')
                 .expect(401)
                 .end(done);
@@ -269,7 +302,7 @@ describe('Server.js /users/** routes ',() => {
 
         it('should return 400 if inexistent data',(done)=>{
             request(app)
-            .post('/users/personal/create')
+            .post('/users/personal/set')
             .set('x-auth', users[0].tokens[0].token)
             .expect(400)
             .end(done);
@@ -277,7 +310,7 @@ describe('Server.js /users/** routes ',() => {
 
         it('should return 400 if wrong data',(done)=>{
             request(app)
-            .post('/users/personal/create')
+            .post('/users/personal/set')
             .set('x-auth', users[0].tokens[0].token)
             .send({
                 something: true,
