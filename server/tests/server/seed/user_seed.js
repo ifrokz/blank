@@ -1,9 +1,10 @@
 "use strict";
 
 const {User} = require('./../../../db/models/user');
-const users = require('./user_seed_data/users-data').users;
+const {users, personalData} = require('./user_seed_data/users-data');
+
 const populateUsers = async () => {
-    try{ 
+    try{
         await User.remove({}); 
         const userOne = await new User(users[0]).save();
         const userTwo = await new User(users[1]).save();
@@ -14,5 +15,5 @@ const populateUsers = async () => {
 };
 
 module.exports = {
-    populateUsers, users
+    populateUsers, users, personalData
 };

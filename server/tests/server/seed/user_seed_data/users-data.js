@@ -2,12 +2,13 @@ const {ObjectID} = require('mongodb');
 const jwt = require('jsonwebtoken');
 
 const {genPayload} = require('./../../../../db/models/utils/user_utils');
+const personalData = require('./personal-data').personalData;
 
 const userOneId = new ObjectID();
 const userTwoId = new ObjectID();
 const userThreeId = new ObjectID();
 
-module.exports.users = [
+const users = [
     {
         _id: userOneId,
         email: 'test@test.com',
@@ -15,7 +16,8 @@ module.exports.users = [
         tokens: [{
             access: 'auth',
             token: jwt.sign({...genPayload({access: 'auth', _id: userOneId})}, process.env.JWT_SECRET).toString()
-        }]
+        }],
+        personal: {...personalData[0]}
     },
     {
         _id: userTwoId,
@@ -24,7 +26,8 @@ module.exports.users = [
         tokens: [{
             access: 'auth',
             token: jwt.sign({...genPayload({access: 'auth', _id: userTwoId})}, process.env.JWT_SECRET).toString()
-        }]
+        }],
+        personal: {...personalData[1]}
     },
     {
         _id: userThreeId,
@@ -33,6 +36,11 @@ module.exports.users = [
         tokens: [{
             access: 'auth',
             token: jwt.sign({...genPayload({access: 'auth', _id: userThreeId})}, process.env.JWT_SECRET).toString()
-        }]
+        }],
+        personal: {...personalData[2]}
     }   
 ];
+
+module.exports ={
+    personalData, users
+};

@@ -20,13 +20,12 @@ router.post('/users/personal/update', authenticate, async (req, res) => {
 
 router.post('/users/personal/create', authenticate, async (req, res) => {
   try {  
-    let data = _.pick(req.body, ['name','secondName','addresses']);
-    data.userId = req.user._id;
-    data.phones = [];
-    req.body.phones.forEach(phone => {
-      data.phones.push(phone);
-    });
-    
+    let data = _.pick(req.body, ['name','secondName','address','phone']);
+
+    if(_.isEmpty(data)){
+      throw Error('Inexistent or wrong data.');
+    }
+
     let user = await User.findById(req.user._id);
     user.personal = data;
     await user.save();

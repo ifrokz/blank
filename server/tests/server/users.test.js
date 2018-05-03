@@ -3,13 +3,14 @@
 const expect = require('expect');
 const request = require('supertest');
 const {ObjectID} = require('mongodb');
+const _ = require('lodash');
 
 const {User} = require('./../../db/models/user.js');
 const {app} = require('./../../server.js');
-const {populateUsers, users} = require('./seed/user_seed.js');
+const {populateUsers, users, personalData} = require('./seed/user_seed.js');
 
 beforeEach(populateUsers);
-describe('Server.js /users/** routes ',() => {
+describe('Server.js /users/** routes ',() => {  
     describe('POST /users/register', ()=>{
         it('should create a user', (done)=>{
             const tempUser = {
@@ -171,6 +172,119 @@ describe('Server.js /users/** routes ',() => {
                 .set('x-auth', users[0].tokens.token + 'salt')
                 .expect(401)
                 .end(done);
+        });
+    });
+
+    describe('POST /users/personal/create',()=>{
+        it('should populate personal data from a created user', (done) => {
+
+            // console.log({...personalData[0]})
+            
+            request(app)
+                .post('/users/personal/create')
+                .set('x-auth', users[2].tokens[0].token)
+                .send({...personalData[0]})
+                .expect(200)
+                .expect((res)=>{
+                    expect(res.body._id ).toBe(users[2]._id.toHexString())
+                })
+                .end(async (err, res) => {
+                    if(err){
+                        return done(err);
+                    };
+                    
+                    try {
+                        const user = await User.findById(res.body._id);
+                        expect(user.personal).toMatchObject(personalData[0])
+                        done();
+                    } catch (e) {
+                        done(e);
+                    }
+                });
+        });
+
+        it('should populate only name and secondname from a created user', (done) => {
+            let tempData = _.pick(personalData[0], ['name', 'secondName']);
+            // console.log({...tempData})
+            request(app)
+            .post('/users/personal/create')
+            .set('x-auth', users[2].tokens[0].token)
+            .send({...tempData})
+            .expect(200)
+            .expect((res)=>{
+                expect(res.body._id ).toBe(users[2]._id.toHexString())
+            })
+            .end(async (err, res) => {
+                if(err){
+                    return done(err);
+                };
+                
+                try {
+                    const user = await User.findById(res.body._id);
+                    expect(user.personal).toMatchObject(tempData);
+
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            });
+        });
+
+        it('should populate only personal.address data from a created user', (done) => {
+
+            let tempData = _.pick(personalData[0], ['address']);
+            request(app)
+                .post('/users/personal/create')
+                .set('x-auth', users[2].tokens[0].token)
+                .send({...personalData[0]})
+                .expect(200)
+                .expect((res)=>{
+                    expect(res.body._id ).toBe(users[2]._id.toHexString())
+                })
+                .end(async (err, res) => {
+                    if(err){
+                        return done(err);
+                    };
+                    
+                    try {
+                        const user = await User.findById(res.body._id);
+                        expect(user.personal.address).toMatchObject({
+                            ...personalData[0].address
+                        });
+
+                        done();
+                    } catch (e) {
+                        done(e);
+                    }
+                });
+        });
+
+        it('should return 401 if unauthorized' ,(done) => {
+            request(app)
+                .post('/users/personal/create')
+                .set('x-auth', users[0].tokens[0].token + 'salt')
+                .expect(401)
+                .end(done);
+        });
+
+        it('should return 400 if inexistent data',(done)=>{
+            request(app)
+            .post('/users/personal/create')
+            .set('x-auth', users[0].tokens[0].token)
+            .expect(400)
+            .end(done);
+        });
+
+        it('should return 400 if wrong data',(done)=>{
+            request(app)
+            .post('/users/personal/create')
+            .set('x-auth', users[0].tokens[0].token)
+            .send({
+                something: true,
+                usuario: 'user'
+            })
+            .expect(400)
+            .end(done);
         });
     });
 });

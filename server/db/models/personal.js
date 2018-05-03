@@ -8,12 +8,7 @@ module.exports.personalObject = {
         minlength: 2
     },
     secondName: {type: String, minlength: 2},
-    phones:[{
-        main_phone: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
+    phone:{
         code:  {
             type: String,
             required: false,
@@ -29,13 +24,8 @@ module.exports.personalObject = {
                 message: '{VALUE} is not a valid phone number or has a wrong region code.'
             }
         }
-    }],
-    addresses: [{
-        main_address: {
-            default: false,
-            type: Boolean,
-            required: false
-        },
+    },
+    address: {
         country: {
             type: String,
             required: false
@@ -61,6 +51,10 @@ module.exports.personalObject = {
             required: false,
             type: String
         },
+        number: {
+            required: false,
+            type: String
+        },
         floor: {
             required: false,
             type: String
@@ -69,6 +63,6 @@ module.exports.personalObject = {
             type: String,
             required: false
         }
-    }],
+    },
 };
 
