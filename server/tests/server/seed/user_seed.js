@@ -1,7 +1,7 @@
 "use strict";
 
 const {User} = require('./../../../db/models/user');
-const {users, personalData} = require('./user_seed_data/users-data');
+const {users, personalData} = require('./data/user_data');
 
 const populateUsers = async () => {
     try{

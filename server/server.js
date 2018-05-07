@@ -8,8 +8,8 @@ const _ = require('lodash');
 const app = require('express')();
 
 app.use(bodyParser.json());
-app.use(require('./routes/user'));
-app.use(require('./routes/users-personal'));
+app.use(require('./routes/user/user'));
+app.use(require('./routes/user/user-phone'));
 
 console.log('Validator:', require('validator').isMobilePhone('+33605842890', 'es-ES', {strictMode: true}) );
 

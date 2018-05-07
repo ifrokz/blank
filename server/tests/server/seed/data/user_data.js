@@ -2,7 +2,7 @@ const {ObjectID} = require('mongodb');
 const jwt = require('jsonwebtoken');
 
 const {genPayload} = require('./../../../../db/models/utils/user_utils');
-const personalData = require('./personal-data').personalData;
+const personalData = require('./personal_data').personalData;
 
 const userOneId = new ObjectID();
 const userTwoId = new ObjectID();

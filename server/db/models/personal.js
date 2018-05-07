@@ -1,6 +1,6 @@
 "use strict";
 
-const validator = require('validator');
+const {isMobilePhone} = require('validator');
 
 module.exports.personalObject = {
     name:{
@@ -8,23 +8,6 @@ module.exports.personalObject = {
         minlength: 2
     },
     secondName: {type: String, minlength: 2},
-    phone:{
-        code:  {
-            type: String,
-            required: false,
-            trim: true
-        },
-        number: {
-            type: String,
-            required: false,
-            trim: true,
-            validate: {
-                isAsync: true,
-                validator: (phone)=> validator.isMobilePhone(phone, 'any', {strictMode: false}),
-                message: '{VALUE} is not a valid phone number or has a wrong region code.'
-            }
-        }
-    },
     address: {
         country: {
             type: String,

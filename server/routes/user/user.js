@@ -3,8 +3,8 @@
 const router = require('express').Router();
 const _ = require('lodash');
 
-const {User} = require('./../db/models/user');
-const {authenticate} = require('./../middleware/authenticate');
+const {User} = require('./../../db/models/user');
+const {authenticate} = require('./../../middleware/authenticate');
 
 router.post('/users/register', async (req, res) => { 
     try {
@@ -51,6 +51,27 @@ router.delete('/users/me/token', authenticate, async (req, res)=>{
     };
 });
 
+router.post('/users/personal/', authenticate, async (req, res) => {
+    try {  
+      let data = _.pick(req.body, ['name','secondName','address']);
+  
+      if(_.isEmpty(data)){
+        throw Error('Inexistent or wrong data.');
+      }
+  
+      let user = await User.findById(req.user._id);
+      
+      user.personal = {
+          ...user.personal,
+          ...data
+      }
+  
+      await user.save();
+      res.send(user);
+    }catch (e){
+      res.status(400).send(e);
+    };
+});
 
 module.exports = router;
 

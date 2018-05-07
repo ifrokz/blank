@@ -1,10 +1,10 @@
 "use strict";
 
 const mongoose = require('mongoose');
-const validator = require('validator');
-const jwt = require('jsonwebtoken');
-const _ = require('lodash');
-const bcrypt = require('bcrypt');
+const {isEmail} = require('validator');
+const {sign, verify} = require('jsonwebtoken');
+const {pick} = require('lodash');
+const {compare, genSalt, hash} = require('bcrypt');
 
 const {genPayload} = require('./utils/user_utils');
 
@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
         unique: true,
         validate: {
             isAsync: true,
-            validator: (email)=> validator.isEmail(email),
+            validator: (email)=> isEmail(email),
             message: '{VALUE} is not a valid email.'
         }
     },
@@ -45,13 +45,13 @@ UserSchema.methods.toJSON = function () {
     const user = this;
     const userObject = user.toObject();
 
-    return _.pick(userObject, ['_id', 'email']);
+    return pick(userObject, ['_id', 'email']);
 };
 
 UserSchema.methods.generateAuthToken = function () {
     const user = this;
     const access = 'auth';
-    const token = jwt.sign(genPayload({_id: user._id, access}), process.env.JWT_SECRET).toString();
+    const token = sign(genPayload({_id: user._id, access}), process.env.JWT_SECRET).toString();
 
     user.tokens.push({access,token});
 
@@ -75,7 +75,7 @@ UserSchema.statics.findByToken = function (token){
     let decoded = undefined;
 
     try {
-        decoded = jwt.verify(token, process.env.JWT_SECRET);
+        decoded = verify(token, process.env.JWT_SECRET);
     } catch (e) {
         return Promise.reject();
     };
@@ -96,7 +96,7 @@ UserSchema.statics.findByCredentials = async function (email, password) {
         };
 
         return new Promise((resolve, reject)=>{
-            bcrypt.compare(password, user.password, (err, res) => {
+            compare(password, user.password, (err, res) => {
                 if(res){
                     resolve(user);
                 }else{
@@ -115,9 +115,9 @@ UserSchema.pre('save', function(next){
     const user = this;
     const saltRounds = process.env.NODE_ENV === 'test' ? 1 : 10;
     if(user.isModified('password')){
-        bcrypt.genSalt(saltRounds, (err, salt) => {
-            bcrypt.hash(user.password, salt, (err, hashedPassword) => {
-                bcrypt.compare(user.password, hashedPassword, (err, res) => {
+        genSalt(saltRounds, (err, salt) => {
+            hash(user.password, salt, (err, hashedPassword) => {
+                compare(user.password, hashedPassword, (err, res) => {
                     user.password = hashedPassword;
                     next();
                 });
@@ -127,7 +127,6 @@ UserSchema.pre('save', function(next){
         next();
     };
 });
-
 
 const User = mongoose.model('Users' , UserSchema);
 
