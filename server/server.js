@@ -10,6 +10,7 @@ const app = require('express')();
 app.use(bodyParser.json());
 app.use(require('./routes/user/user'));
 app.use(require('./routes/user/user-phone'));
+app.use(require('./routes/user/user-address'));
 
 console.log('Validator:', require('validator').isMobilePhone('+33605842890', 'es-ES', {strictMode: true}) );
 

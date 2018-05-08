@@ -2,7 +2,7 @@ module.exports = [
    {
       "country": "USA",
       "state": "Pensilvania",
-      "postCode": "19019",
+      "post_code": "19019",
       "city": "Philadelphia",
       "street": "N 6th St",
       "number": '100',
@@ -12,7 +12,7 @@ module.exports = [
     {
       "country": "Spain",
       "state": "C.Valenciana",
-      "postCode": "46026",
+      "post_code": "46026",
       "city": "Valencia",
       "street": "C/Paco Pierra",
       "number":'2',
@@ -22,7 +22,7 @@ module.exports = [
     {
       country: "Spain",
       state: 'C.Valenciana',
-      postCode: "46026",
+      post_code: "46026",
       city: "Valencia",
       street: "C/ de Malilla",
       number: '92',

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const {ObjectID} = require('mongodb');
 const {isMobilePhone} = require('validator');
 
 const PhoneSchema = new mongoose.Schema({

@@ -7,7 +7,7 @@ module.exports.personalObject = {
         type: String,
         minlength: 2
     },
-    secondName: {type: String, minlength: 2},
+    second_name: {type: String, minlength: 2},
     address: {
         country: {
             type: String,

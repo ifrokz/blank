@@ -53,7 +53,7 @@ router.delete('/users/me/token', authenticate, async (req, res)=>{
 
 router.post('/users/personal/', authenticate, async (req, res) => {
     try {  
-      let data = _.pick(req.body, ['name','secondName','address']);
+      let data = _.pick(req.body, ['name','second_name','address']);
   
       if(_.isEmpty(data)){
         throw Error('Inexistent or wrong data.');
@@ -65,7 +65,29 @@ router.post('/users/personal/', authenticate, async (req, res) => {
           ...user.personal,
           ...data
       }
+
+      await user.save();
+      res.send(user);
+    }catch (e){
+      res.status(400).send(e);
+    };
+});
+
+router.patch('/users/personal/', authenticate, async (req, res) => {
+    try {  
+      let data = _.pick(req.body, ['name','second_name','address']);
   
+      if(_.isEmpty(data)){
+        throw Error('Inexistent or wrong data.');
+      }
+  
+      let user = await User.findById(req.user._id);
+      
+      user.personal = {
+          ...user.personal,
+          ...data
+      }
+      
       await user.save();
       res.send(user);
     }catch (e){

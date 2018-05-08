@@ -1,14 +1,16 @@
-module.exports.personalData = [
+const personalData = [
   {
     name: "Ivan",
-    secondName: "Ruiz Rosello"
+    second_name: "Ruiz Rosello"
   },
   {
     "name": "Andrew",
-    "secondName": "Mead Mead"
+    "second_name": "Mead Mead"
   },
   {
     "name": "Pablo",
-    "secondName": "Tolosa Cerezo"
+    "second_name": "Tolosa Cerezo"
   }
 ];
+
+module.exports = {personalData};
