@@ -75,7 +75,7 @@ router.delete('/users/me/phone/:id', authenticate, async(req,res)=> {
   try{
     const phone = await Phone.findByIdAndRemove(req.params.id);
     if(!phone){
-      return res.status(404).send()
+      return res.status(404).send();
     };
     res.send(phone);
   }catch(e){
@@ -89,7 +89,7 @@ router.patch('/users/me/phone/:id', authenticate, async(req, res) => {
   }
 
   try {
-    const body = pick(req.body, ['code', 'number'])
+    const body = pick(req.body, ['code', 'number', 'main_phone']);
     const phone = await Phone.findByIdAndUpdate(
       req.params.id,
       { ...body},
@@ -100,7 +100,7 @@ router.patch('/users/me/phone/:id', authenticate, async(req, res) => {
     if(!phone){
       return res.status(404).send();
     };
-    res.send(phone)
+    res.send(phone);
   }catch (e) {
     res.status(400).send(e);
   };

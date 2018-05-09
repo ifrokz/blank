@@ -1,6 +1,7 @@
 const expect = require('expect');
 const request = require('supertest');
 const {ObjectID} = require('mongodb');
+const {pick} = require('lodash');
 
 const {app} = require('./../../server.js');
 const {Phone, phonesData, populatePhones, users} = require('./seed/phone_seed');
@@ -53,7 +54,7 @@ describe('Serverjs /users/me/phone** routes', () => {
         .end(done);
     });
 
-    it('should return 401 if not authenticated',(done)=>{
+    it('should return 401 if unauthorized',(done)=>{
       request(app)
         .post('/users/me/phone')
         .expect(401)
@@ -70,9 +71,91 @@ describe('Serverjs /users/me/phone** routes', () => {
         .expect(200)
         .end(done);
     });
+
+    it('should return 404 if not found', (done) => {
+      request(app)
+        .delete(`/users/me/phone/${phonesData[2]._id}`)
+        .set('x-auth', users[0].tokens[0].token)
+        .expect(200)
+        .end(done);
+    });
+
+    it('should return 400 if id is invalid', (done) => {
+      request(app)
+        .delete(`/users/me/phone/${phonesData[2]._id+1}`)
+        .set('x-auth', users[0].tokens[0].token)
+        .expect(400)
+        .end(done);
+    });
+
+    it('should return 401 if unauthorized',(done)=>{
+      request(app)
+        .delete(`/users/me/phone/${phonesData[0]._id}`)
+        .expect(401)
+        .end(done);
+    });
   });
 
-  describe('PATCH /users/me/phone', () => {});
+  describe('PATCH /users/me/phone/:id', () => {
+    it('should patch phone by id', (done)=>{
+      let tempPhone = {
+        code: 'ex-EX',
+        number: '699999899',
+        main_phone: true 
+      }
+
+      request(app)
+      .patch(`/users/me/phone/${phonesData[0]._id}`)
+      .set('x-auth', users[0].tokens[0].token)
+      .send({
+        ...tempPhone
+      })
+      .expect(200)
+      .expect((res)=>{
+        expect(tempPhone).toMatchObject(pick(res.body, ['code', 'number', 'main_phone']));
+        tempPhone = res.body;
+      })
+      .end(async(err,res)=>{
+        if(err){
+          return done(err);
+        };
+
+        try{
+          const phone = await Phone.findById(res.body._id);
+          expect({
+            ...phone.toObject(),
+            _id: phone._id.toHexString()
+          }).toMatchObject({...tempPhone})
+          done();
+        }catch(e){
+          done(e);
+        };
+      });
+    });
+    
+    it('should return 401 if unauthorized',(done)=>{
+      request(app)
+        .patch(`/users/me/phone/${phonesData[0]._id}`)
+        .expect(401)
+        .end(done);
+    });
+
+    it('should return 400 if id is invalid', (done) => {
+      request(app)
+        .patch(`/users/me/phone/${phonesData[2]._id+1}`)
+        .set('x-auth', users[0].tokens[0].token)
+        .expect(400)
+        .end(done);
+    });
+
+    it('should return 404 if not found', (done) => {
+      request(app)
+        .patch(`/users/me/phone/${phonesData[2]._id}`)
+        .set('x-auth', users[0].tokens[0].token)
+        .expect(200)
+        .end(done);
+    });
+  });
 
   describe('GET /users/me/phone/:id', () => {
     it('should return phone data by ID', (done) => {
@@ -116,7 +199,7 @@ describe('Serverjs /users/me/phone** routes', () => {
       .end(done);
     });
 
-    it('should return 401 if not authenticated',(done)=>{
+    it('should return 401 if unauthorized',(done)=>{
       request(app)
         .get('/users/me/phone/:id')
         .expect(401)
@@ -145,7 +228,7 @@ describe('Serverjs /users/me/phone** routes', () => {
         .end(done)
     });
 
-    it('should return 401 if not authenticated',(done)=>{
+    it('should return 401 if unauthorized',(done)=>{
       request(app)
         .get('/users/me/phone')
         .expect(401)
