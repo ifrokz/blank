@@ -1,14 +1,12 @@
 "use strict";
 
 const mongoose = require('mongoose');
-const {isEmail} = require('validator');
+const {isEmail, isMobilePhone} = require('validator');
 const {sign, verify} = require('jsonwebtoken');
 const {pick} = require('lodash');
 const {compare, genSalt, hash} = require('bcrypt');
 
 const {genPayload} = require('./utils/user_utils');
-
-const {PersonalSchema, personalObject} = require('./personal');
 
 const UserSchema = new mongoose.Schema({
     email: {
@@ -38,7 +36,24 @@ const UserSchema = new mongoose.Schema({
             required: true
         }
     }],
-    personal: {...personalObject}
+    role: {
+        type: String, 
+        trim: true,
+        required: false,
+        default: 'user'
+    },
+    personal: {
+        name:{
+            type: String,
+            minlength: 1,
+            maxlength: 25
+        },
+        second_name: {
+            type: String, 
+            minlength: 1,
+            maxlength: 50
+        }
+    }
 });
 
 UserSchema.methods.toJSON = function () {

@@ -1,3 +1,5 @@
+"use strict";
+
 const {phonesData, users} = require('./data/phone_data');
 const {Phone} = require('../../../db/models/phone');
 

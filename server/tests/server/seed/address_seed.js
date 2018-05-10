@@ -1,3 +1,5 @@
+"use strict";
+
 const {addressData, users} = require('./data/address_data');
 const {Address} = require('../../../db/models/address');
 

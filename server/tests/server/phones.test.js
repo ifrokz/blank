@@ -1,3 +1,5 @@
+"use strict";
+
 const expect = require('expect');
 const request = require('supertest');
 const {ObjectID} = require('mongodb');
@@ -14,7 +16,8 @@ describe('Serverjs /users/me/phone** routes', () => {
       const tempPhone = {
         _creator: users[1]._id.toHexString(),
         code: "es-AR",
-        number: "605842890"
+        number: "605842890",
+        main_phone: false
       };
   
       request(app)

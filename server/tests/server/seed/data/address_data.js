@@ -1,3 +1,5 @@
+"use strict";
+
 const {ObjectID} = require('mongodb');
 
 const users = require('./user_data').users;

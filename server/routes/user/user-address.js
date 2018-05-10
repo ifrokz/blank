@@ -1,3 +1,5 @@
+"use strict";
+
 const router =  require('express').Router();
 const {ObjectID} = require('mongodb');
 const {pick} = require('lodash');
