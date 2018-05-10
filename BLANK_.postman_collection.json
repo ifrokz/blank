@@ -1,18 +1,259 @@
 {
 	"info": {
-		"_postman_id": "afc04bdc-b8ee-48c2-84f0-eaea74bb6a0e",
+		"_postman_id": "bbb67828-c968-40e9-87aa-3c541e8bea0f",
 		"name": "BLANK_",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "USERS",
-			"description": "",
+			"description": null,
 			"item": [
 				{
-					"name": "PHONE",
-					"description": "",
+					"name": "ADDRESS",
+					"description": null,
 					"item": [
+						{
+							"name": "GET /users/me/address",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-auth",
+										"value": "{{x-auth}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/users/me/address/",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users",
+										"me",
+										"address",
+										""
+									]
+								},
+								"description": "returns a array of phones created by the authenticated user"
+							},
+							"response": []
+						},
+						{
+							"name": "PATCH /users/me/address/:id",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "x-auth",
+										"value": "{{x-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"country\": \"Spain\",\n\t\"state\": \"C.Valenciana\",\n\t\"postCode\": \"46026\",\n\t\"city\": \"Valencia\",\n\t\"street\": \"Carrer de Malilla\",\n\t\"number\": 92,\n\t\"floor\": \"6\",\n\t\"door\": 99\n}"
+								},
+								"url": {
+									"raw": "{{url}}/users/me/address/{{address-id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users",
+										"me",
+										"address",
+										"{{address-id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET /users/me/address/:id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-auth",
+										"value": "{{x-auth}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/users/me/address/{{address-id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users",
+										"me",
+										"address",
+										"{{address-id}}"
+									]
+								},
+								"description": "returns a array of phones created by the authenticated user"
+							},
+							"response": []
+						},
+						{
+							"name": "POST /users/me/address",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d140f870-de5f-42cb-a457-dfa15e46a00e",
+										"type": "text/javascript",
+										"exec": [
+											"var body = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable('address-id', body.address._id);"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-auth",
+										"value": "{{x-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"country\": \"Spain\",\n\t\"state\": \"C.Valenciana\",\n\t\"post_code\": \"46026\",\n\t\"city\": \"Valencia\",\n\t\"street\": \"Carrer de Malilla\",\n\t\"number\": \"92\",\n\t\"floor\": \"6\",\n\t\"door\": \"23\"\n}"
+								},
+								"url": {
+									"raw": "{{url}}/users/me/address",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users",
+										"me",
+										"address"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE /users/me/address/:id",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-auth",
+										"value": "{{x-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/users/me/address/{{address-id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users",
+										"me",
+										"address",
+										"{{address-id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "PHONE",
+					"description": null,
+					"item": [
+						{
+							"name": "PATCH /users/me/phone/:id",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "x-auth",
+										"value": "{{x-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"number\": \"675678593\",\n\t\"code\": \"en-US\"\n}"
+								},
+								"url": {
+									"raw": "{{url}}/users/me/phone/{{phone-id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users",
+										"me",
+										"phone",
+										"{{phone-id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET /users/me/phone/",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-auth",
+										"value": "{{x-auth}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/users/me/phone/",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users",
+										"me",
+										"phone",
+										""
+									]
+								},
+								"description": "returns a array of phones created by the authenticated user"
+							},
+							"response": []
+						},
 						{
 							"name": "POST /users/me/phone",
 							"event": [
@@ -68,66 +309,9 @@
 										"value": "{{x-auth}}"
 									}
 								],
-								"body": {},
-								"url": {
-									"raw": "{{url}}/users/me/phone/{{phone-id}}",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"users",
-										"me",
-										"phone",
-										"{{phone-id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "GET /users/me/phone/",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "x-auth",
-										"value": "{{x-auth}}"
-									}
-								],
-								"body": {},
-								"url": {
-									"raw": "{{url}}/users/me/phone/",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"users",
-										"me",
-										"phone",
-										""
-									]
-								},
-								"description": "returns a array of phones created by the authenticated user"
-							},
-							"response": []
-						},
-						{
-							"name": "PATCH /users/me/phone/:id",
-							"request": {
-								"method": "PATCH",
-								"header": [
-									{
-										"key": "x-auth",
-										"value": "{{x-auth}}"
-									},
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"number\": \"675678593\",\n\t\"code\": \"en-US\"\n}"
+									"raw": ""
 								},
 								"url": {
 									"raw": "{{url}}/users/me/phone/{{phone-id}}",
@@ -181,180 +365,8 @@
 					"_postman_isSubFolder": true
 				},
 				{
-					"name": "ADDRESS",
-					"description": "",
-					"item": [
-						{
-							"name": "POST /users/me/address",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "d140f870-de5f-42cb-a457-dfa15e46a00e",
-										"type": "text/javascript",
-										"exec": [
-											"var body = JSON.parse(responseBody);",
-											"postman.setEnvironmentVariable('address-id', body.address._id);"
-										]
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "x-auth",
-										"value": "{{x-auth}}"
-									},
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"country\": \"Spain\",\n\t\"state\": \"C.Valenciana\",\n\t\"postCode\": \"46026\",\n\t\"city\": \"Valencia\",\n\t\"street\": \"Carrer de Malilla\",\n\t\"number\": \"92\",\n\t\"floor\": \"6\",\n\t\"door\": \"23\"\n}"
-								},
-								"url": {
-									"raw": "{{url}}/users/me/address",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"users",
-										"me",
-										"address"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "GET /users/me/address",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "x-auth",
-										"value": "{{x-auth}}"
-									}
-								],
-								"body": {},
-								"url": {
-									"raw": "{{url}}/users/me/address/",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"users",
-										"me",
-										"address",
-										""
-									]
-								},
-								"description": "returns a array of phones created by the authenticated user"
-							},
-							"response": []
-						},
-						{
-							"name": "GET /users/me/address/:id",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "x-auth",
-										"value": "{{x-auth}}"
-									}
-								],
-								"body": {},
-								"url": {
-									"raw": "{{url}}/users/me/address/{{address-id}}",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"users",
-										"me",
-										"address",
-										"{{address-id}}"
-									]
-								},
-								"description": "returns a array of phones created by the authenticated user"
-							},
-							"response": []
-						},
-						{
-							"name": "PATCH /users/me/address/:id",
-							"request": {
-								"method": "PATCH",
-								"header": [
-									{
-										"key": "x-auth",
-										"value": "{{x-auth}}"
-									},
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"country\": \"Spain\",\n\t\"state\": \"C.Valenciana\",\n\t\"postCode\": \"46026\",\n\t\"city\": \"Valencia\",\n\t\"street\": \"Carrer de Malilla\",\n\t\"number\": 92,\n\t\"floor\": \"6\",\n\t\"door\": 99\n}"
-								},
-								"url": {
-									"raw": "{{url}}/users/me/address/{{address-id}}",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"users",
-										"me",
-										"address",
-										"{{address-id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "DELETE /users/me/address/:id",
-							"request": {
-								"method": "DELETE",
-								"header": [
-									{
-										"key": "x-auth",
-										"value": "{{x-auth}}"
-									},
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "{{url}}/users/me/address/{{address-id}}",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"users",
-										"me",
-										"address",
-										"{{address-id}}"
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"_postman_isSubFolder": true
-				},
-				{
 					"name": "USERS",
-					"description": "",
+					"description": null,
 					"item": [
 						{
 							"name": "POST /users/register",
@@ -391,6 +403,38 @@
 									"path": [
 										"users",
 										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "POST /users/personal",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-auth",
+										"value": "{{x-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"Ivan\",\n\t\"second_name\": \"Ruiz Rosello\"\n}"
+								},
+								"url": {
+									"raw": "{{url}}/users/personal/",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users",
+										"personal",
+										""
 									]
 								}
 							},
@@ -437,32 +481,55 @@
 							"response": []
 						},
 						{
-							"name": "POST /users/personal",
+							"name": "GET /users/me",
 							"request": {
-								"method": "POST",
+								"method": "GET",
 								"header": [
 									{
 										"key": "x-auth",
 										"value": "{{x-auth}}"
-									},
-									{
-										"key": "Content-Type",
-										"value": "application/json"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"Ivan\",\n\t\"second_name\": \"Ruiz Rosello\"\n}"
+									"raw": ""
 								},
 								"url": {
-									"raw": "{{url}}/users/personal/",
+									"raw": "{{url}}/users/me",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"users",
-										"personal",
-										""
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE /users/me/token",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-auth",
+										"value": "{{x-auth}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/users/me/token",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users",
+										"me",
+										"token"
 									]
 								}
 							},
@@ -495,55 +562,6 @@
 										"users",
 										"personal",
 										""
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "GET /users/me",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "x-auth",
-										"value": "{{x-auth}}"
-									}
-								],
-								"body": {},
-								"url": {
-									"raw": "{{url}}/users/me",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"users",
-										"me"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "DELETE /users/me/token",
-							"request": {
-								"method": "DELETE",
-								"header": [
-									{
-										"key": "x-auth",
-										"value": "{{x-auth}}"
-									}
-								],
-								"body": {},
-								"url": {
-									"raw": "{{url}}/users/me/token",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"users",
-										"me",
-										"token"
 									]
 								}
 							},
