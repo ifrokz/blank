@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const isPostalCode = require('validator/lib/isPostalCode');
+const {isPostalCode} = require('validator');
 
 const AddressSchema = new mongoose.Schema({
   _creator: {
