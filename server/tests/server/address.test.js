@@ -22,7 +22,8 @@ describe('Servers.js /users/me/address/**', () => {
         street: "Carrer de Malilla",
         number: 92,
         floor: 6,
-        door: 23
+        door: 23,
+        selected_default: true
       };
   
       request(app)
@@ -114,7 +115,8 @@ describe('Servers.js /users/me/address/**', () => {
           street: "Carrer de Malilla",
           number: 92,
           floor: 6,
-          door: 23
+          door: 23,
+          selected_default: true
       }
 
       request(app)

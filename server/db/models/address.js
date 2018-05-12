@@ -60,6 +60,10 @@ const AddressSchema = new mongoose.Schema({
         message: '{VALUE} is not a valid phone post code or has a wrong region code.'
     }
   },
+  selected_default: {
+    default: false,
+    type: Boolean
+  }
 });
 
 const Address = mongoose.model('Addresses', AddressSchema);

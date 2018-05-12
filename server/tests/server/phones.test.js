@@ -17,7 +17,7 @@ describe('Serverjs /users/me/phone** routes', () => {
         _creator: users[1]._id.toHexString(),
         code: "es-AR",
         number: "605842890",
-        main_phone: false
+        selected_default: false
       };
   
       request(app)
@@ -104,7 +104,7 @@ describe('Serverjs /users/me/phone** routes', () => {
       let tempPhone = {
         code: 'ex-EX',
         number: '699999899',
-        main_phone: true 
+        selected_default: false
       }
 
       request(app)

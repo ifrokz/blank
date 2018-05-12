@@ -25,7 +25,7 @@ const PhoneSchema = new mongoose.Schema({
         message: '{VALUE} is not a valid phone number or has a wrong region code.'
     }
   },
-  main_phone: {
+  selected_default: {
     type: Boolean,
     required: true,
     default: false

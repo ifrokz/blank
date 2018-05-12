@@ -1,8 +1,8 @@
 "use strict";
 
-const router =  require('express').Router();
-const {ObjectID} = require('mongodb');
-const {pick} = require('lodash');
+const router =  require('express').Router(),
+{ObjectID} = require('mongodb'),
+{pick} = require('lodash');
 
 const {authenticate} =require('../../middleware/authenticate');
 const {Address} = require('./../../db/models/address');
@@ -13,6 +13,7 @@ router.post('/users/me/address', authenticate, async(req,res)=>{
       _creator: req.user._id,
       ...req.body
     });
+    console.log(req.body)
     await address.save();
     res.status(200).send({
       user: {

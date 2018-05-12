@@ -21,7 +21,8 @@ const addressData = [
       "street": "N 6th St",
       "number": 100,
       "floor": 6,
-      "door": 23
+      "door": 23,
+      selected_default: false
     },
     {    _id: IDs[1].toHexString(),
       _creator: users[1]._id.toHexString(),
@@ -32,7 +33,8 @@ const addressData = [
       "street": "C/Paco Pierra",
       "number":2,
       "floor": 1,
-      "door": 3
+      "door": 3,
+      selected_default: true
     },
     {    _id: IDs[2].toHexString(),
       _creator: users[1]._id.toHexString(),
@@ -43,7 +45,8 @@ const addressData = [
       street: "C/ de Malilla",
       number: 92,
       floor: 6,
-      door: 23
+      door: 23,
+      selected_default: false
     }
 ];
 
