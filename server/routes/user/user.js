@@ -6,7 +6,7 @@ const _ = require('lodash');
 const {User} = require('./../../db/models/user');
 const {authenticate} = require('./../../middleware/authenticate');
 
-router.post('/users/register', async (req, res) => { 
+router.post('/api/users/register', async (req, res) => { 
     try {
         const user  = await new User(req.body).save();
         const token = await user.generateAuthToken();
@@ -20,7 +20,7 @@ router.post('/users/register', async (req, res) => {
     };
 });
 
-router.post('/users/login', async (req, res) => {
+router.post('/api/users/login', async (req, res) => {
     const body = _.pick(req.body, ['email', 'password']);
     try {
         if(_.isEmpty(body)){
@@ -38,11 +38,11 @@ router.post('/users/login', async (req, res) => {
     };
 });
 
-router.get('/users/me', authenticate, (req, res) => {
+router.get('/api/users/me', authenticate, (req, res) => {
     res.send(req.user);
 });
 
-router.delete('/users/me/token', authenticate, async (req, res)=>{
+router.delete('/api/users/me/token', authenticate, async (req, res)=>{
     try {
         await req.user.removeToken(req.token);
         res.status(200).send();
@@ -51,7 +51,7 @@ router.delete('/users/me/token', authenticate, async (req, res)=>{
     };
 });
 
-router.post('/users/personal/', authenticate, async (req, res) => {
+router.post('/api/users/personal/', authenticate, async (req, res) => {
     try {  
       let data = _.pick(req.body, ['name','second_name','address']);
   
@@ -73,7 +73,7 @@ router.post('/users/personal/', authenticate, async (req, res) => {
     };
 });
 
-router.patch('/users/personal/', authenticate, async (req, res) => {
+router.patch('/api/users/personal/', authenticate, async (req, res) => {
     try {  
       let data = _.pick(req.body, ['name','second_name','address']);
   

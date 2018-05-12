@@ -11,8 +11,8 @@ const {populateUsers, users, personalData} = require('./seed/user_seed.js');
 
 beforeEach(populateUsers);
 
-describe('Server.js /users/** routes ',() => {  
-    describe('POST /users/register', ()=>{
+describe('Server.js /api/users/** routes ',() => {  
+    describe('POST /api/users/register', ()=>{
         it('should create a user', (done)=>{
             const tempUser = {
                 email: "tempUser@test.com",
@@ -20,7 +20,7 @@ describe('Server.js /users/** routes ',() => {
             };
     
             request(app)
-                .post('/users/register')
+                .post('/api/users/register')
                 .send(tempUser)
                 .expect(201)
                 .expect((res)=>{
@@ -49,7 +49,7 @@ describe('Server.js /users/** routes ',() => {
             };
     
             request(app)
-                .post('/users/register')
+                .post('/api/users/register')
                 .send(tempUser)
                 .expect(400)
                 .end(done);
@@ -62,18 +62,18 @@ describe('Server.js /users/** routes ',() => {
             };
     
             request(app)
-                .post('/users/register')
+                .post('/api/users/register')
                 .send(tempUser)
                 .expect(409)
                 .end(done);
         });
     });
     
-    describe('POST /users/login', () => {
+    describe('POST /api/users/login', () => {
         it('should login user and return auth token', (done)=> {
             
             request(app)
-                .post('/users/login')
+                .post('/api/users/login')
                 .send({...users[2]})
                 .expect(200)
                 .expect((res)=>{
@@ -101,7 +101,7 @@ describe('Server.js /users/** routes ',() => {
     
         it('should reject login with bad credentials' , (done) => {
             request(app)
-                .post('/users/login')
+                .post('/api/users/login')
                 .send({
                     email: 'inexistentEmail@gmail.com',
                     password: 'password'
@@ -112,7 +112,7 @@ describe('Server.js /users/** routes ',() => {
     
         it('should reject login if empty or wrong data' , (done) => {
             request(app)
-                .post('/users/login')
+                .post('/api/users/login')
                 .send({
                     kelok: 'fa;sdlcom',
                     NOTpassword: 'password'
@@ -122,10 +122,10 @@ describe('Server.js /users/** routes ',() => {
         });
     });
     
-    describe('GET /users/me', ()=>{
+    describe('GET /api/users/me', ()=>{
         it('should return user if authenticated', (done) => {
             request(app)
-                .get('/users/me')
+                .get('/api/users/me')
                 .set('x-auth', users[2].tokens[0].token)
                 .expect(200)
                 .expect((res)=>{
@@ -137,7 +137,7 @@ describe('Server.js /users/** routes ',() => {
 
         it('should return 401 if not authenticated', (done) => {
             request(app)
-                .get('/users/me')
+                .get('/api/users/me')
                 .expect(401)
                 .expect((res)=>{
                     expect(res.body).toEqual({});
@@ -146,10 +146,10 @@ describe('Server.js /users/** routes ',() => {
         });
     });
 
-    describe('DELETE /users/me/token', ()=>{
+    describe('DELETE /api/users/me/token', ()=>{
         it('should remove auth token on logout if authenticated',(done)=>{
             request(app)
-            .delete('/users/me/token')
+            .delete('/api/users/me/token')
             .set('x-auth', users[0].tokens[0].token)
             .expect(200)
             .end(async (err, res) => {
@@ -169,17 +169,17 @@ describe('Server.js /users/** routes ',() => {
 
         it('should return 401 if unauthorized', (done)=>{
             request(app)
-                .delete('/users/me/token')
+                .delete('/api/users/me/token')
                 .set('x-auth', users[0].tokens.token + 'salt')
                 .expect(401)
                 .end(done);
         });
     });
 
-    describe('POST /users/personal',()=>{
+    describe('POST /api/users/personal',()=>{
         it('should populate personal data from a created user', (done) => {
             request(app)
-                .post('/users/personal')
+                .post('/api/users/personal')
                 .set('x-auth', users[2].tokens[0].token)
                 .send({...personalData[0]})
                 .expect(200)
@@ -205,7 +205,7 @@ describe('Server.js /users/** routes ',() => {
             let tempData = _.pick(personalData[0], ['name', 'second_name']);
             
             request(app)
-            .post('/users/personal')
+            .post('/api/users/personal')
             .set('x-auth', users[2].tokens[0].token)
             .send({...tempData})
             .expect(200)
@@ -230,7 +230,7 @@ describe('Server.js /users/** routes ',() => {
 
         it('should return 401 if unauthorized' ,(done) => {
             request(app)
-                .post('/users/personal')
+                .post('/api/users/personal')
                 .set('x-auth', users[0].tokens[0].token + 'salt')
                 .expect(401)
                 .end(done);
@@ -238,7 +238,7 @@ describe('Server.js /users/** routes ',() => {
 
         it('should return 400 if inexistent data',(done)=>{
             request(app)
-            .post('/users/personal')
+            .post('/api/users/personal')
             .set('x-auth', users[0].tokens[0].token)
             .expect(400)
             .end(done);
@@ -246,7 +246,7 @@ describe('Server.js /users/** routes ',() => {
 
         it('should return 400 if wrong data',(done)=>{
             request(app)
-            .post('/users/personal')
+            .post('/api/users/personal')
             .set('x-auth', users[0].tokens[0].token)
             .send({
                 something: true,
@@ -264,10 +264,10 @@ describe('Server.js /users/** routes ',() => {
 
 
 
-    describe('PATCH /users/personal',()=>{
+    describe('PATCH /api/users/personal',()=>{
         it('should populate personal data from a created user', (done) => {
             request(app)
-                .post('/users/personal')
+                .post('/api/users/personal')
                 .set('x-auth', users[2].tokens[0].token)
                 .send({...personalData[0]})
                 .expect(200)
@@ -296,7 +296,7 @@ describe('Server.js /users/** routes ',() => {
             };
             
             request(app)
-            .patch('/users/personal')
+            .patch('/api/users/personal')
             .set('x-auth', users[2].tokens[0].token)
             .send({...tempData})
             .expect(200)
@@ -321,7 +321,7 @@ describe('Server.js /users/** routes ',() => {
 
         it('should return 401 if unauthorized' ,(done) => {
             request(app)
-                .patch('/users/personal')
+                .patch('/api/users/personal')
                 .set('x-auth', users[0].tokens[0].token + 'salt')
                 .expect(401)
                 .end(done);
@@ -329,7 +329,7 @@ describe('Server.js /users/** routes ',() => {
 
         it('should return 400 if inexistent data',(done)=>{
             request(app)
-            .patch('/users/personal')
+            .patch('/api/users/personal')
             .set('x-auth', users[0].tokens[0].token)
             .expect(400)
             .end(done);
@@ -337,7 +337,7 @@ describe('Server.js /users/** routes ',() => {
 
         it('should return 400 if wrong data',(done)=>{
             request(app)
-            .patch('/users/personal')
+            .patch('/api/users/personal')
             .set('x-auth', users[0].tokens[0].token)
             .send({
                 something: true,

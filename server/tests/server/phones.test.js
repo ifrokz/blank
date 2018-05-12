@@ -10,8 +10,8 @@ const {Phone, phonesData, populatePhones, users} = require('./seed/phone_seed');
 
 beforeEach(populatePhones);
 
-describe('Serverjs /users/me/phone** routes', () => {
-  describe('POST /users/me/phone', () => {
+describe('Serverjs /api/users/me/phone** routes', () => {
+  describe('POST /api/users/me/phone', () => {
     it('should save a new phone', (done) => {
       const tempPhone = {
         _creator: users[1]._id.toHexString(),
@@ -21,7 +21,7 @@ describe('Serverjs /users/me/phone** routes', () => {
       };
   
       request(app)
-        .post('/users/me/phone')
+        .post('/api/users/me/phone')
         .set('x-auth', users[0].tokens[0].token)
         .send({...tempPhone})
         .expect(200)
@@ -46,7 +46,7 @@ describe('Serverjs /users/me/phone** routes', () => {
 
     it('should return 400 if wrong data or inexistent', (done) => {
       request(app)
-        .post('/users/me/phone')
+        .post('/api/users/me/phone')
         .set('x-auth', users[0].tokens[0].token)
         .send({
           _creator: users[1]._id.toHexString(),
@@ -59,17 +59,17 @@ describe('Serverjs /users/me/phone** routes', () => {
 
     it('should return 401 if unauthorized',(done)=>{
       request(app)
-        .post('/users/me/phone')
+        .post('/api/users/me/phone')
         .expect(401)
         .end(done);
     });
   });
 
   
-  describe('DELETE /users/me/phone/:id', () => {
+  describe('DELETE /api/users/me/phone/:id', () => {
     it('should remove a phone if authenticated and phone exists', (done) => {
       request(app)
-        .delete(`/users/me/phone/${phonesData[0]._id}`)
+        .delete(`/api/users/me/phone/${phonesData[0]._id}`)
         .set('x-auth', users[0].tokens[0].token)
         .expect(200)
         .end(done);
@@ -77,7 +77,7 @@ describe('Serverjs /users/me/phone** routes', () => {
 
     it('should return 404 if not found', (done) => {
       request(app)
-        .delete(`/users/me/phone/${phonesData[2]._id}`)
+        .delete(`/api/users/me/phone/${phonesData[2]._id}`)
         .set('x-auth', users[0].tokens[0].token)
         .expect(200)
         .end(done);
@@ -85,7 +85,7 @@ describe('Serverjs /users/me/phone** routes', () => {
 
     it('should return 400 if id is invalid', (done) => {
       request(app)
-        .delete(`/users/me/phone/${phonesData[2]._id+1}`)
+        .delete(`/api/users/me/phone/${phonesData[2]._id+1}`)
         .set('x-auth', users[0].tokens[0].token)
         .expect(400)
         .end(done);
@@ -93,13 +93,13 @@ describe('Serverjs /users/me/phone** routes', () => {
 
     it('should return 401 if unauthorized',(done)=>{
       request(app)
-        .delete(`/users/me/phone/${phonesData[0]._id}`)
+        .delete(`/api/users/me/phone/${phonesData[0]._id}`)
         .expect(401)
         .end(done);
     });
   });
 
-  describe('PATCH /users/me/phone/:id', () => {
+  describe('PATCH /api/users/me/phone/:id', () => {
     it('should patch phone by id', (done)=>{
       let tempPhone = {
         code: 'ex-EX',
@@ -108,7 +108,7 @@ describe('Serverjs /users/me/phone** routes', () => {
       }
 
       request(app)
-      .patch(`/users/me/phone/${phonesData[0]._id}`)
+      .patch(`/api/users/me/phone/${phonesData[0]._id}`)
       .set('x-auth', users[0].tokens[0].token)
       .send({
         ...tempPhone
@@ -138,14 +138,14 @@ describe('Serverjs /users/me/phone** routes', () => {
     
     it('should return 401 if unauthorized',(done)=>{
       request(app)
-        .patch(`/users/me/phone/${phonesData[0]._id}`)
+        .patch(`/api/users/me/phone/${phonesData[0]._id}`)
         .expect(401)
         .end(done);
     });
 
     it('should return 400 if id is invalid', (done) => {
       request(app)
-        .patch(`/users/me/phone/${phonesData[2]._id+1}`)
+        .patch(`/api/users/me/phone/${phonesData[2]._id+1}`)
         .set('x-auth', users[0].tokens[0].token)
         .expect(400)
         .end(done);
@@ -153,17 +153,17 @@ describe('Serverjs /users/me/phone** routes', () => {
 
     it('should return 404 if not found', (done) => {
       request(app)
-        .patch(`/users/me/phone/${phonesData[2]._id}`)
+        .patch(`/api/users/me/phone/${phonesData[2]._id}`)
         .set('x-auth', users[0].tokens[0].token)
         .expect(200)
         .end(done);
     });
   });
 
-  describe('GET /users/me/phone/:id', () => {
+  describe('GET /api/users/me/phone/:id', () => {
     it('should return phone data by ID', (done) => {
       request(app)
-        .get(`/users/me/phone/${phonesData[0]._id}`)
+        .get(`/api/users/me/phone/${phonesData[0]._id}`)
         .set('x-auth', users[0].tokens[0].token)
         .expect(200)
         .end((err, res)=>{
@@ -177,7 +177,7 @@ describe('Serverjs /users/me/phone** routes', () => {
 
     it('should return 400 if wrong data', (done) => {
       request(app)
-        .get(`/users/me/phone/${phonesData[0]._id}Salt`)
+        .get(`/api/users/me/phone/${phonesData[0]._id}Salt`)
         .set('x-auth', users[0].tokens[0].token)
         .expect(400)
         .end((err, res)=>{
@@ -196,7 +196,7 @@ describe('Serverjs /users/me/phone** routes', () => {
 
     it('should return 404 if not found', (done) => {
       request(app)
-      .get(`/users/me/phone/${new ObjectID().toHexString()}`)
+      .get(`/api/users/me/phone/${new ObjectID().toHexString()}`)
       .set('x-auth', users[0].tokens[0].token)
       .expect(404)
       .end(done);
@@ -204,16 +204,16 @@ describe('Serverjs /users/me/phone** routes', () => {
 
     it('should return 401 if unauthorized',(done)=>{
       request(app)
-        .get('/users/me/phone/:id')
+        .get('/api/users/me/phone/:id')
         .expect(401)
         .end(done);
     });
   });
 
-  describe('GET /users/me/phone/', () => {
+  describe('GET /api/users/me/phone/', () => {
     it('should return a array of phones by creator _id', (done) => {
       request(app)
-        .get('/users/me/phone')
+        .get('/api/users/me/phone')
         .set('x-auth', users[0].tokens[0].token)
         .expect(200)
         .expect(res=>{
@@ -225,7 +225,7 @@ describe('Serverjs /users/me/phone** routes', () => {
 
     it('should return 404 if no phones found', (done) => {
       request(app)
-        .get('/users/me/phone')
+        .get('/api/users/me/phone')
         .set('x-auth', users[2].tokens[0].token)
         .expect(404)
         .end(done)
@@ -233,7 +233,7 @@ describe('Serverjs /users/me/phone** routes', () => {
 
     it('should return 401 if unauthorized',(done)=>{
       request(app)
-        .get('/users/me/phone')
+        .get('/api/users/me/phone')
         .expect(401)
         .end(done);
     });

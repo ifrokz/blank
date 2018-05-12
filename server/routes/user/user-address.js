@@ -7,7 +7,7 @@ const router =  require('express').Router(),
 const {authenticate} =require('../../middleware/authenticate');
 const {Address} = require('./../../db/models/address');
 
-router.post('/users/me/address', authenticate, async(req,res)=>{
+router.post('/api/users/me/address', authenticate, async(req,res)=>{
   try {
     const address = new Address({
       _creator: req.user._id,
@@ -29,7 +29,7 @@ router.post('/users/me/address', authenticate, async(req,res)=>{
   };
 });
 
-router.get('/users/me/address', authenticate, async(req,res)=>{
+router.get('/api/users/me/address', authenticate, async(req,res)=>{
   try {
     const addresses = await Address.find({
       _creator: req.user._id
@@ -45,7 +45,7 @@ router.get('/users/me/address', authenticate, async(req,res)=>{
   };
 });
 
-router.get('/users/me/address/:id', authenticate, async(req,res)=>{
+router.get('/api/users/me/address/:id', authenticate, async(req,res)=>{
   try {
     if(!ObjectID.isValid(req.params.id)){
        throw {
@@ -70,7 +70,7 @@ router.get('/users/me/address/:id', authenticate, async(req,res)=>{
   };
 });
 
-router.delete('/users/me/address/:id', authenticate, async(req,res)=>{
+router.delete('/api/users/me/address/:id', authenticate, async(req,res)=>{
   if(!ObjectID.isValid(req.params.id)){
     return res.status(400).send();
   };
@@ -86,7 +86,7 @@ router.delete('/users/me/address/:id', authenticate, async(req,res)=>{
   };
 });
 
-router.patch('/users/me/address/:id', authenticate, async(req,res)=>{
+router.patch('/api/users/me/address/:id', authenticate, async(req,res)=>{
   if(!ObjectID.isValid(req.params.id)){
     return res.status(400).send();
   }

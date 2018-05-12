@@ -11,8 +11,8 @@ const {populateAddresses, addressData, Address, users} = require('./seed/address
 beforeEach(populateAddresses);
 
 
-describe('Servers.js /users/me/address/**', () => {
-  describe('POST /users/me/address', () => {
+describe('Servers.js /api/users/me/address/**', () => {
+  describe('POST /api/users/me/address', () => {
     it('should save a new address', (done) => {
       const tempAddress = {
         country: "Spain",
@@ -27,7 +27,7 @@ describe('Servers.js /users/me/address/**', () => {
       };
   
       request(app)
-        .post('/users/me/address')
+        .post('/api/users/me/address')
         .set('x-auth', users[0].tokens[0].token)
         .send({...tempAddress})
         .expect(200)
@@ -52,7 +52,7 @@ describe('Servers.js /users/me/address/**', () => {
 
     it('should return 400 if wrong data or inexistent', (done) => {
       request(app)
-        .post('/users/me/address')
+        .post('/api/users/me/address')
         .set('x-auth', users[0].tokens[0].token)
         .send({
           _creator: users[1]._id.toHexString(),
@@ -65,17 +65,17 @@ describe('Servers.js /users/me/address/**', () => {
 
     it('should return 401 if unauthorized',(done)=>{
       request(app)
-        .post('/users/me/address')
+        .post('/api/users/me/address')
         .expect(401)
         .end(done);
     });
   });
 
   
-  describe('DELETE /users/me/address/:id', () => {
+  describe('DELETE /api/users/me/address/:id', () => {
     it('should remove a address if authenticated and address exists', (done) => {
       request(app)
-        .delete(`/users/me/address/${addressData[0]._id}`)
+        .delete(`/api/users/me/address/${addressData[0]._id}`)
         .set('x-auth', users[0].tokens[0].token)
         .expect(200)
         .end(done);
@@ -83,7 +83,7 @@ describe('Servers.js /users/me/address/**', () => {
 
     it('should return 404 if not found', (done) => {
       request(app)
-        .delete(`/users/me/address/${addressData[2]._id}`)
+        .delete(`/api/users/me/address/${addressData[2]._id}`)
         .set('x-auth', users[0].tokens[0].token)
         .expect(200)
         .end(done);
@@ -91,7 +91,7 @@ describe('Servers.js /users/me/address/**', () => {
 
     it('should return 400 if id is invalid', (done) => {
       request(app)
-        .delete(`/users/me/address/${addressData[2]._id+1}`)
+        .delete(`/api/users/me/address/${addressData[2]._id+1}`)
         .set('x-auth', users[0].tokens[0].token)
         .expect(400)
         .end(done);
@@ -99,13 +99,13 @@ describe('Servers.js /users/me/address/**', () => {
 
     it('should return 401 if unauthorized',(done)=>{
       request(app)
-        .delete(`/users/me/address/${addressData[0]._id}`)
+        .delete(`/api/users/me/address/${addressData[0]._id}`)
         .expect(401)
         .end(done);
     });
   });
 
-  describe('PATCH /users/me/address/:id', () => {
+  describe('PATCH /api/users/me/address/:id', () => {
     it('should patch address by id', (done)=>{
       let tempAddress = {
           country: "Spain",
@@ -120,7 +120,7 @@ describe('Servers.js /users/me/address/**', () => {
       }
 
       request(app)
-      .patch(`/users/me/address/${addressData[0]._id}`)
+      .patch(`/api/users/me/address/${addressData[0]._id}`)
       .set('x-auth', users[0].tokens[0].token)
       .send({
         ...tempAddress
@@ -150,14 +150,14 @@ describe('Servers.js /users/me/address/**', () => {
     
     it('should return 401 if unauthorized',(done)=>{
       request(app)
-        .patch(`/users/me/address/${addressData[0]._id}`)
+        .patch(`/api/users/me/address/${addressData[0]._id}`)
         .expect(401)
         .end(done);
     });
 
     it('should return 400 if id is invalid', (done) => {
       request(app)
-        .patch(`/users/me/address/${addressData[2]._id+1}`)
+        .patch(`/api/users/me/address/${addressData[2]._id+1}`)
         .set('x-auth', users[0].tokens[0].token)
         .expect(400)
         .end(done);
@@ -165,17 +165,17 @@ describe('Servers.js /users/me/address/**', () => {
 
     it('should return 404 if not found', (done) => {
       request(app)
-        .patch(`/users/me/address/${addressData[2]._id}`)
+        .patch(`/api/users/me/address/${addressData[2]._id}`)
         .set('x-auth', users[0].tokens[0].token)
         .expect(200)
         .end(done);
     });
   });
 
-  describe('GET /users/me/address/:id', () => {
+  describe('GET /api/users/me/address/:id', () => {
     it('should return address data by ID', (done) => {
       request(app)
-        .get(`/users/me/address/${addressData[0]._id}`)
+        .get(`/api/users/me/address/${addressData[0]._id}`)
         .set('x-auth', users[0].tokens[0].token)
         .expect(200)
         .end((err, res)=>{
@@ -189,7 +189,7 @@ describe('Servers.js /users/me/address/**', () => {
 
     it('should return 400 if wrong data', (done) => {
       request(app)
-        .get(`/users/me/address/${addressData[0]._id+1}`)
+        .get(`/api/users/me/address/${addressData[0]._id+1}`)
         .set('x-auth', users[0].tokens[0].token)
         .expect(400)
         .end((err, res)=>{
@@ -208,7 +208,7 @@ describe('Servers.js /users/me/address/**', () => {
 
     it('should return 404 if not found', (done) => {
       request(app)
-      .get(`/users/me/address/${new ObjectID().toHexString()}`)
+      .get(`/api/users/me/address/${new ObjectID().toHexString()}`)
       .set('x-auth', users[0].tokens[0].token)
       .expect(404)
       .end(done);
@@ -216,16 +216,16 @@ describe('Servers.js /users/me/address/**', () => {
 
     it('should return 401 if unauthorized',(done)=>{
       request(app)
-        .get('/users/me/address/:id')
+        .get('/api/users/me/address/:id')
         .expect(401)
         .end(done);
     });
   });
 
-  describe('GET /users/me/address/', () => {
+  describe('GET /api/users/me/address/', () => {
     it('should return a array of address by creator _id', (done) => {
       request(app)
-        .get('/users/me/address')
+        .get('/api/users/me/address')
         .set('x-auth', users[0].tokens[0].token)
         .expect(200)
         .expect(res=>{
@@ -237,7 +237,7 @@ describe('Servers.js /users/me/address/**', () => {
 
     it('should return 404 if no addresses found', (done) => {
       request(app)
-        .get('/users/me/address')
+        .get('/api/users/me/address')
         .set('x-auth', users[2].tokens[0].token)
         .expect(404)
         .end(done)
@@ -245,7 +245,7 @@ describe('Servers.js /users/me/address/**', () => {
 
     it('should return 401 if unauthorized',(done)=>{
       request(app)
-        .get('/users/me/address')
+        .get('/api/users/me/address')
         .expect(401)
         .end(done);
     });

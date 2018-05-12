@@ -7,7 +7,7 @@ const {pick} = require('lodash');
 const {authenticate} =require('../../middleware/authenticate');
 const {Phone} = require('../../db/models/phone');
 
-router.post('/users/me/phone', authenticate, async(req,res)=>{
+router.post('/api/users/me/phone', authenticate, async(req,res)=>{
   try {
     const phone = new Phone({
       _creator: req.user._id,
@@ -28,7 +28,7 @@ router.post('/users/me/phone', authenticate, async(req,res)=>{
   };
 });
 
-router.get('/users/me/phone/:id', authenticate, async(req, res) => {
+router.get('/api/users/me/phone/:id', authenticate, async(req, res) => {
   try {
     if(!ObjectID.isValid(req.params.id)){
        throw {
@@ -53,7 +53,7 @@ router.get('/users/me/phone/:id', authenticate, async(req, res) => {
   };
 });
 
-router.get('/users/me/phone', authenticate, async(req, res) => {
+router.get('/api/users/me/phone', authenticate, async(req, res) => {
   try {
     const phones = await Phone.find({
       _creator: req.user._id
@@ -69,7 +69,7 @@ router.get('/users/me/phone', authenticate, async(req, res) => {
   };
 });
 
-router.delete('/users/me/phone/:id', authenticate, async(req,res)=> {
+router.delete('/api/users/me/phone/:id', authenticate, async(req,res)=> {
   if(!ObjectID.isValid(req.params.id)){
     return res.status(400).send();
   };
@@ -85,7 +85,7 @@ router.delete('/users/me/phone/:id', authenticate, async(req,res)=> {
   };
 });
 
-router.patch('/users/me/phone/:id', authenticate, async(req, res) => {
+router.patch('/api/users/me/phone/:id', authenticate, async(req, res) => {
   if(!ObjectID.isValid(req.params.id)){
     return res.status(400).send();
   }
