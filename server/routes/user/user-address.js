@@ -13,7 +13,7 @@ router.post('/api/users/me/address', authenticate, async(req,res)=>{
       _creator: req.user._id,
       ...req.body
     });
-    console.log(req.body)
+    
     await address.save();
     res.status(200).send({
       user: {

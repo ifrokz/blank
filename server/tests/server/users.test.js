@@ -70,11 +70,46 @@ describe('Server.js /api/users/** routes ',() => {
     });
     
     describe('POST /api/users/login', () => {
-        it('should login user and return auth token', (done)=> {
+        it('should login user by email and return auth token', (done)=> {
             
             request(app)
                 .post('/api/users/login')
-                .send({...users[2]})
+                .send({
+                    user_name: users[2].email,
+                    password: users[2].password
+                })
+                .expect(200)
+                .expect((res)=>{
+                    expect(res.body.email).toBe(users[2].email);
+                    expect(res.body._id).toBe(users[2]._id.toHexString());
+                    expect(res.headers['x-auth']).toBeTruthy();
+                })
+                .end(async (err,res)=>{
+                    if(err){
+                       return done(err);
+                    };
+    
+                    try{ 
+                        const user = await User.findById(users[2]._id);
+                        expect(user.tokens[1]).toMatchObject({
+                            access: 'auth',
+                            token: res.headers['x-auth']
+                        });
+                        done();
+                    }catch(e){
+                        done(e);
+                    };
+                });
+        });
+
+        it('should login user by user_name and return auth token', (done)=> {
+            
+            request(app)
+                .post('/api/users/login')
+                .send({
+                    user_name: users[2].user_name,
+                    password: users[2].password
+                })
                 .expect(200)
                 .expect((res)=>{
                     expect(res.body.email).toBe(users[2].email);
@@ -103,7 +138,7 @@ describe('Server.js /api/users/** routes ',() => {
             request(app)
                 .post('/api/users/login')
                 .send({
-                    email: 'inexistentEmail@gmail.com',
+                    user_name: 'inexistentEmail@gmail.com',
                     password: 'password'
                 })
                 .expect(404)    
@@ -114,8 +149,7 @@ describe('Server.js /api/users/** routes ',() => {
             request(app)
                 .post('/api/users/login')
                 .send({
-                    kelok: 'fa;sdlcom',
-                    NOTpassword: 'password'
+                    someData: 'random string'
                 })  
                 .expect(400)
                 .end(done);

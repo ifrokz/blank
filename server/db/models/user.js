@@ -21,6 +21,11 @@ const UserSchema = new mongoose.Schema({
             message: '{VALUE} is not a valid email.'
         }
     },
+    user_name: {
+        type: String, 
+        required: false,
+        minlength: 4
+    },
     password: {
         type: String,
         required: true,
@@ -102,29 +107,31 @@ UserSchema.statics.findByToken = function (token){
     });
 };
 
-UserSchema.statics.findByCredentials = async function (email, password) {
+UserSchema.statics.findByCredentials = async function ({user_name, password}) {
     const user = this;
 
-    return User.findOne({email}).then(user=> {
-        if(!user) {
-            return Promise.reject();
-        };
-
-        return new Promise((resolve, reject)=>{
-            compare(password, user.password, (err, res) => {
-                if(res){
-                    resolve(user);
-                }else{
-                    reject();
-                };
+    const tempFind = (user_name && isEmail(user_name)) ? {email: user_name} : {user_name}
+    
+    return User.findOne({...tempFind})
+        .then(user=> {
+            if(!user) {
+                return Promise.reject();
+            };
+            return new Promise((resolve, reject)=>{
+                compare(password, user.password, (err, res) => {
+                    if(res){
+                        resolve(user);
+                    }else{
+                        reject();
+                    };
+                });
             });
         });
-    });
 };
 
 UserSchema.statics.updatePersonalInfo = async function (info) {
     const {name, lastName, phones} = {...info};
-}
+};
 
 UserSchema.pre('save', function(next){
     const user = this;

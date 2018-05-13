@@ -14,6 +14,7 @@ const users = [
     {
         _id: userOneId,
         email: 'test@test.com',
+        user_name: 'userOne',
         password: 'userOnePass',
         tokens: [{
             access: 'auth',
@@ -24,6 +25,7 @@ const users = [
     {
         _id: userTwoId,
         email: 'admin@test.com',
+        user_name: 'userTwo',
         password: 'userTwoPass',
         tokens: [{
             access: 'auth',
@@ -34,6 +36,7 @@ const users = [
     {
         _id: userThreeId,
         email: 'help@test.com',
+        user_name: 'userThree',
         password: 'userThreePass',
         tokens: [{
             access: 'auth',

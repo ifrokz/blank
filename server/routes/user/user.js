@@ -21,16 +21,16 @@ router.post('/api/users/register', async (req, res) => {
 });
 
 router.post('/api/users/login', async (req, res) => {
-    const body = _.pick(req.body, ['email', 'password']);
+    const body = _.pick(req.body, ['user_name', 'password']);
     try {
         if(_.isEmpty(body)){
             throw new Error();
         };
-        const user = await User.findByCredentials(body.email, body.password);
+        const user = await User.findByCredentials({...body});
         const token = await user.generateAuthToken();
         res.header('x-auth', token).send(user);
     } catch (e) {
-        if(!(_.has(body, 'email') && _.has(body, 'password'))){
+        if(!_.has(body, 'user_name') || !_.has(body, 'password')){
             res.status(400).send(e);
         }else{
             res.status(404).send(e);
