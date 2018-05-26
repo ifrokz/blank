@@ -59,6 +59,8 @@ const UserSchema = new mongoose.Schema({
             maxlength: 50
         }
     }
+}, {
+    usePushEach: true
 });
 
 UserSchema.methods.toJSON = function () {
